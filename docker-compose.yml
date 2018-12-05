@@ -15,8 +15,10 @@ services:
     build: core/
     container_name: spammer-core
     command: npm start
+    environment:
+      - PORT=5000
     ports:
-      - 3000:3000
+      - 5000:5000
     links:
       - redis:redis
     networks: 
