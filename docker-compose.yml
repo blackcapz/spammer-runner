@@ -1,18 +1,33 @@
 version: '3'
 
 services: 
-  core:
-    build: core/
-    command: npm start
+  redis:
+    image: redis:3.2
+    container_name: spammer-redis
     ports:
-      - "5000:5000"
+      - 6379:6379
     networks: 
       - app-network
+
+  core:
+    depends_on:
+      - redis
+    build: core/
+    container_name: spammer-core
+    command: npm start
+    ports:
+      - 5000:5000
+    links:
+      - redis:redis
+    networks: 
+      - app-network
+
   ui:
     build: ui/
+    container_name: spammer-ui
     command: npm run serve
     ports:
-      - "8080:8080"
+      - 8080:8080
     networks: 
       - app-network
 
